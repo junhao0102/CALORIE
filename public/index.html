@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>卡路里計算器</title>
+  </head>
+  <body>
+    <main>
+      <h1>卡路里計算器</h1>
+      <div class="container">
+        <form id="calorie-counter">
+          <label for="budget">熱量預算:</label>
+          <input type="number" min="0" id="budget" required/>
+          <fieldset id="breakfast">
+            <legend>早餐</legend>
+            <div class="input-container"></div>
+          </fieldset>
+          <fieldset id="lunch">
+            <legend>午餐</legend>
+            <div class="input-container"></div>
+          </fieldset>
+          <fieldset id="dinner">
+            <legend>晚餐</legend>
+            <div class="input-container"></div>
+          </fieldset>
+          <fieldset id="snacks">
+            <legend>點心</legend>
+            <div class="input-container"></div>
+          </fieldset>
+          <fieldset id="exercise">
+            <legend>運動</legend>
+            <div class="input-container"></div>
+          </fieldset>
+          <div class="controls">
+            <span>
+              <select id="entry-dropdown" name="options">
+                <option value="breakfast" selected>早餐</option>
+                <option value="lunch">午餐</option>
+                <option value="dinner">晚餐</option>
+                <option value="snacks">點心</option>
+                <option value="exercise">運動</option>
+              </select>
+              <button type="button" id="add-entry">增加項目</button>
+            </span>
+          </div>
+          <div>
+            <button type="submit">計算剩餘卡路里</button>
+            <button type="button" id="clear">清除</button>
+          </div>
+        </form>
+        <div id="output" class="output hide"></div>
+      </div>
+    </main>
+  
+  </body>
+</html>
+<script src="./script.js"></script>

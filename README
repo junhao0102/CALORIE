@@ -1,0 +1,14 @@
+#### Docker Hub 下載官方的 PostgreSQL 映像：
+```
+docker pull postgres
+```
+
+#### 使用 docker run 命令來運行 PostgreSQL 容器:
+```
+docker run --name my_postgres \
+  -e POSTGRES_USER=user \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=database \
+  -p 5432:5432 \
+  -d postgres
+```
