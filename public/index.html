@@ -11,8 +11,10 @@
       <h1>卡路里計算器</h1>
       <div class="container">
         <form id="calorie-counter">
-          <label for="budget">熱量預算:</label>
-          <input type="number" min="0" id="budget" required/>
+          <label for="date">選擇日期 : </label>
+          <input type="date" id="date" name="date" required />
+          <label for="budget">熱量預算 : </label>
+          <input type="number" min="0" id="budget" required />
           <fieldset id="breakfast">
             <legend>早餐</legend>
             <div class="input-container"></div>
@@ -46,14 +48,14 @@
             </span>
           </div>
           <div>
-            <button type="submit">計算剩餘卡路里</button>
+            <button type="button" id="calculate">計算剩餘卡路里</button>
+            <button type="submit" id="submit">提交</button>
             <button type="button" id="clear">清除</button>
           </div>
         </form>
         <div id="output" class="output hide"></div>
       </div>
     </main>
-  
   </body>
 </html>
 <script src="./script.js"></script>

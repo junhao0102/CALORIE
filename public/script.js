@@ -1,9 +1,11 @@
-const calorieCounter = document.getElementById("calorie-counter");
 const budgetNumberInput = document.getElementById("budget");
+const form = document.getElementById("calorie-counter");
 const entryDropdown = document.getElementById("entry-dropdown");
 const addEntryButton = document.getElementById("add-entry");
+const calculateButton = document.getElementById("calculate");
 const clearButton = document.getElementById("clear");
 const output = document.getElementById("output");
+
 let isError = false;
 
 /* 新增表單項目 */
@@ -12,12 +14,12 @@ function addEntry() {
   const targetInputContainer = document.querySelector(
     `#${entryDropdown.value} .input-container`
   );
-  
+
   // 計算目前容器內已有的文字輸入框數量，加 1 作為新項目編號
   const entryNumber =
     targetInputContainer.querySelectorAll('input[type="text"]').length + 1;
 
-    // 準備要新增的 HTML 字串，包含文字與數字輸入框
+  // 準備要新增的 HTML 字串，包含文字與數字輸入框
   const HTMLString = `
   <div>
   <input type="text" id="${entryDropdown.value}-${entryNumber}-name" placeholder="項目"/>
@@ -40,13 +42,12 @@ function isInvalidInput(str) {
   return str.match(regex);
 }
 
-
-// 將傳入的 NodeList 中所有輸入框的值累加起來
+/* 將傳入的 NodeList 中所有輸入框的值累加起來 */
 function getCaloriesFromInputs(list) {
   let calories = 0;
-  
+
   for (const item of list) {
-    // 清除不必要的符號或空白字符 
+    // 清除不必要的符號或空白字符
     const currVal = cleanInputString(item.value);
     // 檢查是否符合科學記號
     const invalidInputMatch = isInvalidInput(currVal);
@@ -62,11 +63,8 @@ function getCaloriesFromInputs(list) {
 }
 
 /* 計算卡路里 */
-function calculateCalories(e) {
-  // 防止表單提交時頁面重新加載
-  e.preventDefault();
+function calculateCalories() {
   isError = false;
-
   // 取得各輸入框中的數值
   const breakfastNumberInputs = document.querySelectorAll(
     "#breakfast input[type='number']"
@@ -95,9 +93,11 @@ function calculateCalories(e) {
     return;
   }
   // 計算實際攝取的總熱量
-  const consumedCalories = breakfastCalories + lunchCalories + dinnerCalories + snacksCalories;
-  // 計算剩餘熱量 
-  const remainingCalories = budgetCalories - consumedCalories + exerciseCalories;
+  const consumedCalories =
+    breakfastCalories + lunchCalories + dinnerCalories + snacksCalories;
+  // 計算剩餘熱量
+  const remainingCalories =
+    budgetCalories - consumedCalories + exerciseCalories;
   // 判斷是熱量盈餘或熱量赤字
   const surplusOrDeficit = remainingCalories < 0 ? "熱量盈餘" : "熱量赤字";
 
@@ -114,6 +114,12 @@ function calculateCalories(e) {
 
   // 從 class 屬性中移除 hide 這個樣式
   output.classList.remove("hide");
+
+  return {
+    consumedCalories,
+    remainingCalories,
+    surplusOrDeficit,
+  };
 }
 
 
@@ -135,7 +141,37 @@ function clearForm() {
   output.classList.add("hide");
 }
 
-// 綁定事件監聽器
+/* 傳送資料到後端 */
+function submitForm(event) {
+  // 阻止默認提交行為
+  event.preventDefault(); 
+  // 獲取表單中用戶選擇的日期
+  const date = document.getElementById('date').value
+  // 調用計算卡路里的函數，獲取返回的數據
+  const data = calculateCalories();
+  data["date"] = date
+
+  // 使用 Fetch API 將數據發送到後端
+  fetch("http://localhost:3000/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // 指定請求數據類型為 JSON
+    },
+    body: JSON.stringify(data), // 將數據對象轉換為 JSON 格式
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("提交成功:", result);
+      alert("提交成功！"); 
+    })
+    .catch((error) => {
+      console.error("提交失敗:", error);
+      alert("提交失敗，請稍後重試。");
+    });
+}
+
+/* 綁定事件監聽器 */
 addEntryButton.addEventListener("click", addEntry);
-calorieCounter.addEventListener("submit", calculateCalories);
+calculateButton.addEventListener("click", calculateCalories);
 clearButton.addEventListener("click", clearForm);
+form.addEventListener("submit", submitForm);
