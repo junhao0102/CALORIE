@@ -9,7 +9,7 @@ const port = 3000; // 伺服器端口號
 // PostgreSQL 資料庫連線配置
 const pool = new Pool({
   user: "user",
-  host: "localhost",
+  host: "db",
   database: "database",
   password: "password",
   port: 5432,
